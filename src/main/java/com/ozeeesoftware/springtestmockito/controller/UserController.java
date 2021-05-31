@@ -51,7 +51,7 @@ public class UserController {
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<User> deleteUser(User user){
+    public ResponseEntity<User> deleteUser(@RequestBody User user){
         return userService.deleteUser(user);
     }
 }
