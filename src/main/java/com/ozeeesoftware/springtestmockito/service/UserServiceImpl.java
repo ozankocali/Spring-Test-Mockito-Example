@@ -1,5 +1,6 @@
 package com.ozeeesoftware.springtestmockito.service;
 
+import com.ozeeesoftware.springtestmockito.exception.NotFoundByIdException;
 import com.ozeeesoftware.springtestmockito.model.User;
 import com.ozeeesoftware.springtestmockito.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,9 @@ public class UserServiceImpl implements UserService{
     @Override
     public ResponseEntity<User> getUserById(Long id) {
 
-        User user=userRepository.findById(id).orElseThrow(null);
+        User user=userRepository.findById(id).orElseThrow(
+                ()->new NotFoundByIdException("User not found with id: "+id)
+        );
 
         return new ResponseEntity<User>(user,HttpStatus.OK);
     }
@@ -51,7 +54,9 @@ public class UserServiceImpl implements UserService{
     @Override
     public ResponseEntity<User> updateUser(User user) {
 
-        User existingUser=userRepository.findById(user.getId()).orElseThrow(null);
+        User existingUser=userRepository.findById(user.getId()).orElseThrow(
+                ()->new NotFoundByIdException("User not found")
+        );
 
         existingUser.setUsername(user.getUsername());
         existingUser.setFirstName(user.getFirstName());
@@ -66,7 +71,9 @@ public class UserServiceImpl implements UserService{
     @Override
     public ResponseEntity<User> deleteUser(User user) {
 
-        User existingUser=userRepository.findById(user.getId()).orElseThrow(null);
+        User existingUser=userRepository.findById(user.getId()).orElseThrow(
+                ()->new NotFoundByIdException("User not found")
+        );
 
         userRepository.delete(user);
 
